@@ -7,6 +7,8 @@ import { Brain, AlertTriangle, ArrowRight, CheckCircle2, ChevronRight } from 'lu
 
 export const AIAnalysisPage: React.FC = () => {
   const { navigateTo, currentUser, triggerRefresh } = useApp();
+
+  if (!currentUser) return null;
   
   // Loading & Result States
   const [analyzing, setAnalyzing] = useState(true);

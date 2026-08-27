@@ -9,8 +9,10 @@ import {
 } from 'lucide-react';
 
 export const IncidentDetailsPage: React.FC = () => {
-  const { selectedIncidentId, currentRole, currentUser, navigateTo, refreshTrigger } = useApp();
+  const { selectedIncidentId, currentUser, navigateTo, refreshTrigger } = useApp();
   
+  if (!currentUser) return null;
+  const currentRole = currentUser.role;
   const [incident, setIncident] = useState<Incident | null>(null);
   const [reports, setReports] = useState<Report[]>([]);
   const [updates, setUpdates] = useState<IncidentUpdate[]>([]);
