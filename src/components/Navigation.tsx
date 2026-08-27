@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import type { PageType } from '../context/AppContext';
 import { Logo } from './Logo';
-import { Bell, Menu, X, PlusCircle, User, Award, Shield } from 'lucide-react';
+import { Bell, Menu, X, PlusCircle, User, Award, Shield, LogOut } from 'lucide-react';
 
 interface NavigationProps {
   onToggleNotifications: () => void;
 }
 
 export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications }) => {
-  const { currentPage, currentRole, navigateTo, unreadCount } = useApp();
+  const { currentPage, currentUser, navigateTo, unreadCount, logout } = useApp();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
-  const navLinks: { label: string; page: PageType; roles?: string[] }[] = [
+  const navLinks: { label: string; page: PageType }[] = [
     { label: 'Home', page: 'home' },
     { label: 'Community Map', page: 'map' },
     { label: 'Incidents', page: 'incidents' },
@@ -24,7 +24,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
   };
 
   const getRoleIcon = () => {
-    switch (currentRole) {
+    if (!currentUser) return null;
+    switch (currentUser.role) {
       case 'admin':
         return <Shield size={16} style={{ color: 'var(--color-terracotta)' }} />;
       case 'response':
@@ -35,7 +36,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
   };
 
   const getRoleLabel = () => {
-    switch (currentRole) {
+    if (!currentUser) return '';
+    switch (currentUser.role) {
       case 'admin': return 'Administrator';
       case 'response': return 'Response Team';
       default: return 'Community Member';
@@ -71,42 +73,71 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
 
         {/* Right side actions */}
         <div className="desktop-actions">
-          {/* Dashboard shortcuts for response/admin */}
-          {currentRole === 'admin' && (
-            <button 
-              onClick={() => handleNavClick('admin-dashboard')}
-              className={`nav-link-btn ${currentPage === 'admin-dashboard' ? 'active' : ''}`}
-              style={{ fontWeight: 600 }}
-            >
-              Admin Dashboard
-            </button>
+          {currentUser ? (
+            <>
+              {/* Dashboard shortcuts for response/admin */}
+              {currentUser.role === 'admin' && (
+                <button 
+                  onClick={() => handleNavClick('admin-dashboard')}
+                  className={`nav-link-btn ${currentPage === 'admin-dashboard' ? 'active' : ''}`}
+                  style={{ fontWeight: 600 }}
+                >
+                  Admin Dashboard
+                </button>
+              )}
+
+              {currentUser.role === 'community' && (
+                <button 
+                  onClick={() => handleNavClick('user-dashboard')}
+                  className={`nav-link-btn ${currentPage === 'user-dashboard' ? 'active' : ''}`}
+                  style={{ fontWeight: 600 }}
+                >
+                  My Reports
+                </button>
+              )}
+
+              {/* User profile role badge */}
+              <div className="role-profile-badge" title={`Logged in as ${getRoleLabel()}`}>
+                {getRoleIcon()}
+                <span className="role-badge-text">{currentUser.name}</span>
+              </div>
+
+              {/* Notifications Trigger */}
+              <button 
+                className="notif-trigger-btn" 
+                onClick={onToggleNotifications}
+                aria-label="Open notifications"
+              >
+                <Bell size={20} />
+                {unreadCount > 0 && <span className="notif-badge-dot">{unreadCount}</span>}
+              </button>
+
+              <button 
+                className="btn btn-outline btn-icon btn-sm"
+                onClick={() => {
+                  logout();
+                  setMobileMenuOpen(false);
+                }}
+              >
+                <LogOut size={16} />
+              </button>
+            </>
+          ) : (
+            <>
+              <button 
+                className="btn btn-outline"
+                onClick={() => handleNavClick('login')}
+              >
+                Sign In
+              </button>
+              <button 
+                className="btn btn-secondary"
+                onClick={() => handleNavClick('register')}
+              >
+                Register
+              </button>
+            </>
           )}
-
-          {currentRole === 'community' && (
-            <button 
-              onClick={() => handleNavClick('user-dashboard')}
-              className={`nav-link-btn ${currentPage === 'user-dashboard' ? 'active' : ''}`}
-              style={{ fontWeight: 600 }}
-            >
-              My Reports
-            </button>
-          )}
-
-          {/* User profile role badge */}
-          <div className="role-profile-badge" title={`Logged in as ${getRoleLabel()}`}>
-            {getRoleIcon()}
-            <span className="role-badge-text">{getRoleLabel()}</span>
-          </div>
-
-          {/* Notifications Trigger */}
-          <button 
-            className="notif-trigger-btn" 
-            onClick={onToggleNotifications}
-            aria-label="Open notifications"
-          >
-            <Bell size={20} />
-            {unreadCount > 0 && <span className="notif-badge-dot">{unreadCount}</span>}
-          </button>
 
           {/* Report an Incident button CTA */}
           <button 
@@ -120,14 +151,16 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
 
         {/* Mobile Hamburger toggle */}
         <div className="mobile-toggle-wrapper">
-          <button
-            className="notif-trigger-btn"
-            onClick={onToggleNotifications}
-            style={{ marginRight: '8px' }}
-          >
-            <Bell size={20} />
-            {unreadCount > 0 && <span className="notif-badge-dot">{unreadCount}</span>}
-          </button>
+          {currentUser && (
+            <button
+              className="notif-trigger-btn"
+              onClick={onToggleNotifications}
+              style={{ marginRight: '8px' }}
+            >
+              <Bell size={20} />
+              {unreadCount > 0 && <span className="notif-badge-dot">{unreadCount}</span>}
+            </button>
+          )}
           
           <button
             className="mobile-hamburger-btn"
@@ -150,10 +183,27 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
               </button>
             </div>
 
-            <div className="mobile-role-info">
-              {getRoleIcon()}
-              <span>Logged in as <strong>{getRoleLabel()}</strong></span>
-            </div>
+            {currentUser ? (
+              <div className="mobile-role-info">
+                {getRoleIcon()}
+                <span>{currentUser.name} (<strong>{getRoleLabel()}</strong>)</span>
+              </div>
+            ) : (
+              <div style={{ padding: '16px 24px', display: 'flex', gap: '10px' }}>
+                <button 
+                  className="btn btn-outline w-full"
+                  onClick={() => handleNavClick('login')}
+                >
+                  Sign In
+                </button>
+                <button 
+                  className="btn btn-secondary w-full"
+                  onClick={() => handleNavClick('register')}
+                >
+                  Register
+                </button>
+              </div>
+            )}
 
             <nav className="mobile-nav-links">
               {navLinks.map((link) => (
@@ -166,7 +216,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
                 </button>
               ))}
 
-              {currentRole === 'admin' && (
+              {currentUser?.role === 'admin' && (
                 <button
                   onClick={() => handleNavClick('admin-dashboard')}
                   className={`mobile-nav-link ${currentPage === 'admin-dashboard' ? 'active' : ''}`}
@@ -175,7 +225,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
                 </button>
               )}
 
-              {currentRole === 'community' && (
+              {currentUser?.role === 'community' && (
                 <button
                   onClick={() => handleNavClick('user-dashboard')}
                   className={`mobile-nav-link ${currentPage === 'user-dashboard' ? 'active' : ''}`}
@@ -188,12 +238,26 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
             <div className="mobile-drawer-actions">
               <button
                 className="btn btn-primary w-full btn-icon"
-                style={{ justifyContent: 'center' }}
+                style={{ justifyContent: 'center', marginBottom: '10px' }}
                 onClick={() => handleNavClick('report')}
               >
                 <PlusCircle size={16} />
                 <span>Report an Incident</span>
               </button>
+
+              {currentUser && (
+                <button
+                  className="btn btn-outline w-full btn-icon"
+                  style={{ justifyContent: 'center' }}
+                  onClick={() => {
+                    logout();
+                    setMobileMenuOpen(false);
+                  }}
+                >
+                  <LogOut size={16} />
+                  <span>Sign Out</span>
+                </button>
+              )}
             </div>
           </div>
         </div>

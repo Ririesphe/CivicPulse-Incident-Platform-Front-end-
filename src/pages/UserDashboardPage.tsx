@@ -7,6 +7,8 @@ import { Calendar, MapPin, FileText, ChevronRight } from 'lucide-react';
 export const UserDashboardPage: React.FC = () => {
   const { currentUser, navigateTo, refreshTrigger } = useApp();
   
+  if (!currentUser) return null;
+
   const [userReports, setUserReports] = useState<Report[]>([]);
   const [incidentsMap, setIncidentsMap] = useState<Record<string, Incident>>({});
 
