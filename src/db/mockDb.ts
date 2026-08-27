@@ -18,7 +18,6 @@ const SEED_USERS: User[] = [
     email: 'siphelele@civicpulse.org',
     phone: '+27 82 123 4567',
     role: 'community',
-    password: 'password123',
     created_at: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
@@ -27,7 +26,6 @@ const SEED_USERS: User[] = [
     email: 'thabo.ndlovu@capetown.gov.za',
     phone: '+27 83 987 6543',
     role: 'response',
-    password: 'password123',
     created_at: new Date(Date.now() - 60 * 24 * 60 * 60 * 1000).toISOString(),
   },
   {
@@ -36,7 +34,6 @@ const SEED_USERS: User[] = [
     email: 'sarah.jenkins@civicpulse.org',
     phone: '+27 71 555 1234',
     role: 'admin',
-    password: 'password123',
     created_at: new Date(Date.now() - 90 * 24 * 60 * 60 * 1000).toISOString(),
   }
 ];
@@ -379,11 +376,6 @@ export const initializeDb = (): void => {
 // Database Getter/Setter Helpers
 export const db = {
   getUsers: (): User[] => JSON.parse(localStorage.getItem(STORAGE_KEYS.USERS) || '[]'),
-  saveUser: (user: User) => {
-    const list = db.getUsers();
-    list.push(user);
-    localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(list));
-  },
   
   getIncidents: (): Incident[] => JSON.parse(localStorage.getItem(STORAGE_KEYS.INCIDENTS) || '[]'),
   saveIncident: (incident: Incident) => {
