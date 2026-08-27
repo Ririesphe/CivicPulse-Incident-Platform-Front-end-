@@ -14,11 +14,8 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
 
   const navLinks: { label: string; page: PageType; roles?: string[] }[] = [
     { label: 'Home', page: 'home' },
-    { label: 'Report Incident', page: 'report' },
     { label: 'Community Map', page: 'map' },
     { label: 'Incidents', page: 'incidents' },
-    { label: 'How It Works', page: 'how-it-works' },
-    { label: 'About', page: 'about' },
   ];
 
   const handleNavClick = (page: PageType) => {
@@ -48,26 +45,29 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
   return (
     <header className="navbar-header">
       <div className="navbar-container">
-        {/* Brand Logo */}
-        <div onClick={() => handleNavClick('home')}>
-          <Logo />
-        </div>
+        {/* Left side: Logo and Nav Items */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
+          {/* Brand Logo */}
+          <div onClick={() => handleNavClick('home')} style={{ cursor: 'pointer' }}>
+            <Logo />
+          </div>
 
-        {/* Desktop Nav Items */}
-        <nav className="desktop-nav">
-          {navLinks.map((link) => {
-            const isActive = currentPage === link.page;
-            return (
-              <button
-                key={link.page}
-                onClick={() => handleNavClick(link.page)}
-                className={`nav-link-btn ${isActive ? 'active' : ''}`}
-              >
-                {link.label}
-              </button>
-            );
-          })}
-        </nav>
+          {/* Desktop Nav Items */}
+          <nav className="desktop-nav">
+            {navLinks.map((link) => {
+              const isActive = currentPage === link.page;
+              return (
+                <button
+                  key={link.page}
+                  onClick={() => handleNavClick(link.page)}
+                  className={`nav-link-btn ${isActive ? 'active' : ''}`}
+                >
+                  {link.label}
+                </button>
+              );
+            })}
+          </nav>
+        </div>
 
         {/* Right side actions */}
         <div className="desktop-actions">

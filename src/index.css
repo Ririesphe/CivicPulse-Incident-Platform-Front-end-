@@ -1192,3 +1192,20 @@ input:checked + .slider:before {
     padding: 24px;
   }
 }
+
+/* Navbar Responsiveness */
+@media (min-width: 769px) {
+  .mobile-toggle-wrapper {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .desktop-nav, .desktop-actions {
+    display: none !important;
+  }
+  .mobile-toggle-wrapper {
+    display: flex;
+    align-items: center;
+  }
+}
