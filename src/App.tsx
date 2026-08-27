@@ -2,7 +2,9 @@ import React, { useState } from 'react';
 import { AppContextProvider, useApp } from './context/AppContext';
 import Navigation from './components/Navigation';
 import NotificationCenter from './components/NotificationCenter';
-import RoleSwitcher from './components/RoleSwitcher';
+import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
+import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ReportIncidentPage from './pages/ReportIncidentPage';
 import AIAnalysisPage from './pages/AIAnalysisPage';
@@ -40,6 +42,12 @@ const AppContent: React.FC = () => {
         return <IncidentDetailsPage />;
       case 'ai-analysis':
         return <AIAnalysisPage />;
+      case 'login':
+        return <LoginPage />;
+      case 'register':
+        return <RegisterPage />;
+      case 'forgot-password':
+        return <ForgotPasswordPage />;
       default:
         return <LandingPage />;
     }
@@ -104,9 +112,6 @@ const AppContent: React.FC = () => {
 
       {/* Slide-over notifications list */}
       <NotificationCenter isOpen={notifOpen} onClose={() => setNotifOpen(false)} />
-
-      {/* Floating Demo Persona Changer */}
-      <RoleSwitcher />
     </div>
   );
 };

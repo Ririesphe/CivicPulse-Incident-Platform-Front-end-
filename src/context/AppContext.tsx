@@ -13,11 +13,13 @@ export type PageType =
   | 'user-dashboard' 
   | 'admin-dashboard' 
   | 'incident-details' 
-  | 'ai-analysis';
+  | 'ai-analysis'
+  | 'login'
+  | 'register'
+  | 'forgot-password';
 
 interface AppContextProps {
-  currentUser: User;
-  currentRole: UserRole;
+  currentUser: User | null;
   currentPage: PageType;
   selectedIncidentId: string | null;
   notifications: Notification[];
@@ -25,7 +27,8 @@ interface AppContextProps {
   refreshTrigger: number;
   aiAnalysisInProgress: boolean;
   setAiAnalysisInProgress: (val: boolean) => void;
-  switchRole: (role: UserRole) => void;
+  login: (user: User) => void;
+  logout: () => void;
   navigateTo: (page: PageType, incidentId?: string | null) => void;
   triggerRefresh: () => void;
   markNotificationAsRead: (id: string) => Promise<void>;
@@ -35,53 +38,40 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  // Initialize database once
   useEffect(() => {
     initializeDb();
   }, []);
 
-  const users = db.getUsers();
-  
-  // States
-  const [currentRole, setCurrentRole] = useState<UserRole>('community');
-  const [currentUser, setCurrentUser] = useState<User>(
-    users.find(u => u.role === 'community') || {
-      id: 'user-siphelele',
-      name: 'Siphelele Malotana',
-      email: 'siphelele@civicpulse.org',
-      phone: '+27 82 123 4567',
-      role: 'community',
-      created_at: new Date().toISOString()
-    }
-  );
-  
+  const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [refreshTrigger, setRefreshTrigger] = useState<number>(0);
   const [aiAnalysisInProgress, setAiAnalysisInProgress] = useState<boolean>(false);
 
-  // Sync role-based mock user
-  const switchRole = (role: UserRole) => {
-    setCurrentRole(role);
-    const allUsers = db.getUsers();
-    const matchedUser = allUsers.find(u => u.role === role);
-    if (matchedUser) {
-      setCurrentUser(matchedUser);
-    }
-    
-    // Redirect role-appropriate dashboards
-    if (role === 'community' && (currentPage === 'admin-dashboard' || currentPage === 'incident-details' && selectedIncidentId === null)) {
-      setCurrentPage('home');
-    } else if (role === 'response' && (currentPage === 'user-dashboard' || currentPage === 'home')) {
-      setCurrentPage('incidents');
-    } else if (role === 'admin' && (currentPage === 'user-dashboard' || currentPage === 'home')) {
-      setCurrentPage('admin-dashboard');
-    }
+  const login = (user: User) => {
+    setCurrentUser(user);
+    if (user.role === 'admin') navigateTo('admin-dashboard');
+    else if (user.role === 'response') navigateTo('incidents');
+    else navigateTo('user-dashboard');
   };
 
-  // Nav helper
+  const logout = () => {
+    setCurrentUser(null);
+    navigateTo('home');
+  };
+
   const navigateTo = (page: PageType, incidentId: string | null = null) => {
+    // Protected routes logic
+    const protectedPages: PageType[] = ['report', 'user-dashboard', 'admin-dashboard', 'incident-details', 'ai-analysis'];
+    
+    if (!currentUser && protectedPages.includes(page)) {
+      setCurrentPage('login');
+      if (incidentId !== null) setSelectedIncidentId(incidentId);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      return;
+    }
+
     setCurrentPage(page);
     if (incidentId !== undefined) {
       setSelectedIncidentId(incidentId);
@@ -93,8 +83,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     setRefreshTrigger(prev => prev + 1);
   };
 
-  // Fetch notifications for active user
   const fetchNotifications = async () => {
+    if (!currentUser) {
+      setNotifications([]);
+      return;
+    }
     try {
       const data = await apiClient.getNotifications(currentUser.id);
       setNotifications(data);
@@ -113,6 +106,7 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   };
 
   const clearNotifications = async () => {
+    if (!currentUser) return;
     db.clearAllNotifications(currentUser.id);
     triggerRefresh();
   };
@@ -123,7 +117,6 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     <AppContext.Provider
       value={{
         currentUser,
-        currentRole,
         currentPage,
         selectedIncidentId,
         notifications,
@@ -131,7 +124,8 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
         refreshTrigger,
         aiAnalysisInProgress,
         setAiAnalysisInProgress,
-        switchRole,
+        login,
+        logout,
         navigateTo,
         triggerRefresh,
         markNotificationAsRead,
