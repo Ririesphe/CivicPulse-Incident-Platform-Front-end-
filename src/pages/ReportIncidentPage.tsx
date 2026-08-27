@@ -14,15 +14,17 @@ const CAPE_TOWN_NEIGHBORHOODS = [
 ];
 
 export const ReportIncidentPage: React.FC = () => {
-  const { navigateTo } = useApp();
+  const { navigateTo, currentUser } = useApp();
+
+  if (!currentUser) return null;
 
   // Form State
   const [description, setDescription] = useState('');
   const [category, setCategory] = useState('');
   const [address, setAddress] = useState('');
   const [coords, setCoords] = useState<{ lat: number; lng: number } | null>(null);
-  const [contactName, setContactName] = useState('Siphelele Malotana');
-  const [contactPhone, setContactPhone] = useState('+27 82 123 4567');
+  const [contactName, setContactName] = useState(currentUser.name);
+  const [contactPhone, setContactPhone] = useState(currentUser.phone);
   const [anonymous, setAnonymous] = useState(false);
   const [imageFile, setImageFile] = useState<string | null>(null);
   const [videoFile, setVideoFile] = useState<string | null>(null);
