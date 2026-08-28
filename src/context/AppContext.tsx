@@ -1,6 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { User, UserRole, Notification } from '../db/schema';
-import { initializeDb, db } from '../db/mockDb';
 import { apiClient } from '../api/apiClient';
 
 export type PageType = 
@@ -38,10 +37,6 @@ interface AppContextProps {
 const AppContext = createContext<AppContextProps | undefined>(undefined);
 
 export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
-  useEffect(() => {
-    initializeDb();
-  }, []);
-
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [currentPage, setCurrentPage] = useState<PageType>('home');
   const [selectedIncidentId, setSelectedIncidentId] = useState<string | null>(null);
@@ -101,13 +96,13 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   }, [currentUser, refreshTrigger]);
 
   const markNotificationAsRead = async (id: string) => {
-    db.markNotificationRead(id);
+    await apiClient.markNotificationRead(id);
     triggerRefresh();
   };
 
   const clearNotifications = async () => {
     if (!currentUser) return;
-    db.clearAllNotifications(currentUser.id);
+    await apiClient.clearAllNotifications(currentUser.id);
     triggerRefresh();
   };
 

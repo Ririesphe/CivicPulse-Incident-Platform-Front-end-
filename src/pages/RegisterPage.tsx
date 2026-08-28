@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { db } from '../db/mockDb';
+import { apiClient } from '../api/apiClient';
+import { Shield, Users, CheckCircle, Eye, EyeOff, AlertCircle } from 'lucide-react';
 import type { User } from '../db/schema';
 
 export const RegisterPage: React.FC = () => {
@@ -9,106 +10,172 @@ export const RegisterPage: React.FC = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [password, setPassword] = useState('');
+  const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // Check if user already exists
-    const users = db.getUsers();
-    if (users.some(u => u.email === email)) {
-      setError('An account with this email already exists.');
-      return;
+    setLoading(true);
+    setError('');
+    try {
+      const response = await apiClient.register({ name, email, phone, password });
+      if (response && response.user) {
+        login(response.user);
+      } else {
+        setError('Invalid response from server.');
+      }
+    } catch (err: any) {
+      setError(err.message || 'Registration failed. Please try again.');
+    } finally {
+      setLoading(false);
     }
-
-    const newUser: User = {
-      id: `user-${Date.now()}`,
-      name,
-      email,
-      phone,
-      password,
-      role: 'community',
-      created_at: new Date().toISOString()
-    };
-
-    db.saveUser(newUser);
-    login(newUser);
   };
 
   return (
-    <div className="container" style={{ maxWidth: '400px', marginTop: '60px', marginBottom: '60px' }}>
-      <div className="form-card">
-        <h2 style={{ textAlign: 'center', marginBottom: '24px' }}>Create an Account</h2>
-        
-        {error && (
-          <div style={{ backgroundColor: 'var(--color-terracotta-light)', color: 'var(--color-terracotta)', padding: '10px', borderRadius: '4px', marginBottom: '16px', fontSize: '0.85rem', fontWeight: 600 }}>
-            {error}
+    <div className="auth-page-wrapper">
+      {/* Left branding panel */}
+      <div className="auth-left-panel">
+        <div className="auth-panel-logo">
+          <div className="auth-panel-logo-icon">
+            <Shield size={22} color="#fff" />
           </div>
-        )}
+          <span className="auth-panel-logo-text">CivicPulse</span>
+        </div>
 
-        <form onSubmit={handleRegister}>
-          <div className="form-group">
-            <label>Full Name <span className="required">*</span></label>
-            <input 
-              type="text" 
-              className="form-control" 
-              placeholder="e.g. Siphelele Malotana" 
-              value={name}
-              onChange={(e) => setName(e.target.value)}
-              required 
-            />
-          </div>
+        <h1 className="auth-panel-headline">
+          Your community,<br />your voice.
+        </h1>
+        <p className="auth-panel-sub">
+          Create a free account to start reporting community incidents, tracking resolution progress, and connecting with your local response teams.
+        </p>
 
-          <div className="form-group">
-            <label>Email <span className="required">*</span></label>
-            <input 
-              type="email" 
-              className="form-control" 
-              placeholder="e.g. siphelele@civicpulse.org" 
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required 
-            />
+        <div className="auth-panel-features">
+          <div className="auth-panel-feature">
+            <div className="auth-panel-feature-icon">
+              <CheckCircle size={18} />
+            </div>
+            <div className="auth-panel-feature-text">
+              <strong>Free to Join</strong>
+              <span>Creating an account is completely free for all community members.</span>
+            </div>
           </div>
+          <div className="auth-panel-feature">
+            <div className="auth-panel-feature-icon">
+              <Users size={18} />
+            </div>
+            <div className="auth-panel-feature-text">
+              <strong>Community Driven</strong>
+              <span>Be part of a network that holds municipalities accountable.</span>
+            </div>
+          </div>
+          <div className="auth-panel-feature">
+            <div className="auth-panel-feature-icon">
+              <Shield size={18} />
+            </div>
+            <div className="auth-panel-feature-text">
+              <strong>Anonymous Reporting</strong>
+              <span>Report incidents anonymously if you prefer — we protect your identity.</span>
+            </div>
+          </div>
+        </div>
+      </div>
 
-          <div className="form-group">
-            <label>Phone Number</label>
-            <input 
-              type="tel" 
-              className="form-control" 
-              placeholder="e.g. +27 82 123 4567" 
-              value={phone}
-              onChange={(e) => setPhone(e.target.value)}
-            />
+      {/* Right form panel */}
+      <div className="auth-right-panel">
+        <div className="auth-form-container">
+          <h2 className="auth-form-title">Create your account</h2>
+          <p className="auth-form-subtitle">Join CivicPulse and start making a difference in your community.</p>
+
+          {error && (
+            <div className="auth-alert auth-alert-error">
+              <AlertCircle size={16} style={{ flexShrink: 0, marginTop: '1px' }} />
+              <span>{error}</span>
+            </div>
+          )}
+
+          <form onSubmit={handleRegister}>
+            <div className="form-group">
+              <label htmlFor="reg-name">Full Name <span className="required">*</span></label>
+              <input
+                id="reg-name"
+                type="text"
+                className="form-control"
+                placeholder="e.g. Siphelele Malotana"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                required
+                autoComplete="name"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reg-email">Email Address <span className="required">*</span></label>
+              <input
+                id="reg-email"
+                type="email"
+                className="form-control"
+                placeholder="you@example.com"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+                autoComplete="email"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reg-phone">Phone Number <span style={{ color: 'var(--color-gray-400)', fontWeight: 400 }}>(optional)</span></label>
+              <input
+                id="reg-phone"
+                type="tel"
+                className="form-control"
+                placeholder="+27 82 123 4567"
+                value={phone}
+                onChange={(e) => setPhone(e.target.value)}
+                autoComplete="tel"
+              />
+            </div>
+
+            <div className="form-group">
+              <label htmlFor="reg-password">Password <span className="required">*</span></label>
+              <div style={{ position: 'relative' }}>
+                <input
+                  id="reg-password"
+                  type={showPassword ? 'text' : 'password'}
+                  className="form-control"
+                  placeholder="At least 8 characters"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  required
+                  minLength={8}
+                  autoComplete="new-password"
+                  style={{ paddingRight: '42px' }}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{ position: 'absolute', right: '12px', top: '50%', transform: 'translateY(-50%)', background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-gray-400)', display: 'flex', alignItems: 'center' }}
+                  tabIndex={-1}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            <button
+              type="submit"
+              className="btn btn-primary w-full"
+              style={{ justifyContent: 'center', padding: '11px 20px', fontSize: '0.9375rem', marginTop: '8px' }}
+              disabled={loading}
+            >
+              {loading ? 'Creating Account...' : 'Create Account'}
+            </button>
+          </form>
+
+          <div className="auth-footer-link">
+            Already have an account?{' '}
+            <button type="button" onClick={() => navigateTo('login')}>Sign In</button>
           </div>
-          
-          <div className="form-group">
-            <label>Password <span className="required">*</span></label>
-            <input 
-              type="password" 
-              className="form-control" 
-              placeholder="Create a strong password" 
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required 
-              minLength={6}
-            />
-          </div>
-          
-          <button type="submit" className="btn btn-primary w-full" style={{ justifyContent: 'center', marginTop: '10px' }}>
-            Register
-          </button>
-        </form>
-        
-        <div style={{ marginTop: '20px', textAlign: 'center', fontSize: '0.85rem', color: 'var(--color-text-muted)' }}>
-          Already have an account?{' '}
-          <button 
-            type="button" 
-            onClick={() => navigateTo('login')}
-            style={{ background: 'none', border: 'none', color: 'var(--color-green)', cursor: 'pointer', fontWeight: 600, padding: 0 }}
-          >
-            Sign In
-          </button>
         </div>
       </div>
     </div>

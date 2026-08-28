@@ -139,14 +139,16 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
             </>
           )}
 
-          {/* Report an Incident button CTA */}
-          <button 
-            className="btn btn-primary btn-icon"
-            onClick={() => handleNavClick('report')}
-          >
-            <PlusCircle size={16} />
-            <span>Report an Incident</span>
-          </button>
+          {/* Report an Incident button CTA — only visible when logged in */}
+          {currentUser && (
+            <button
+              className="btn btn-primary btn-icon"
+              onClick={() => handleNavClick('report')}
+            >
+              <PlusCircle size={16} />
+              <span>Report an Incident</span>
+            </button>
+          )}
         </div>
 
         {/* Mobile Hamburger toggle */}
@@ -236,14 +238,16 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
             </nav>
 
             <div className="mobile-drawer-actions">
-              <button
-                className="btn btn-primary w-full btn-icon"
-                style={{ justifyContent: 'center', marginBottom: '10px' }}
-                onClick={() => handleNavClick('report')}
-              >
-                <PlusCircle size={16} />
-                <span>Report an Incident</span>
-              </button>
+              {currentUser && (
+                <button
+                  className="btn btn-primary w-full btn-icon"
+                  style={{ justifyContent: 'center', marginBottom: '10px' }}
+                  onClick={() => handleNavClick('report')}
+                >
+                  <PlusCircle size={16} />
+                  <span>Report an Incident</span>
+                </button>
+              )}
 
               {currentUser && (
                 <button
