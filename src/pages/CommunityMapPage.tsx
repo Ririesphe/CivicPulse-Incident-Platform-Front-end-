@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
 import type { Incident } from '../db/schema';
 import LeafletMap from '../components/LeafletMap';
-import { Filter, Search, AlertCircle, RefreshCw } from 'lucide-react';
+import { Filter, Search, AlertCircle, RefreshCw, MapPin } from 'lucide-react';
 
 export const CommunityMapPage: React.FC = () => {
   const { navigateTo, refreshTrigger } = useApp();
@@ -182,7 +182,7 @@ export const CommunityMapPage: React.FC = () => {
                     {inc.title}
                   </h4>
                   <p style={{ margin: 0, fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
-                    📍 {inc.address.split(',')[0]}
+                    <MapPin size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} />{inc.address.split(',')[0]}
                   </p>
                   
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: '0.72rem', marginTop: '8px', color: 'var(--color-text-muted)' }}>

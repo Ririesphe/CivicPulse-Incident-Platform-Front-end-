@@ -3,6 +3,7 @@ import { useApp } from '../context/AppContext';
 import { db } from '../db/mockDb';
 import type { Incident } from '../db/schema';
 import LeafletMap from '../components/LeafletMap';
+import { MapPin } from 'lucide-react';
 import { Shield, Users, ArrowRight, Activity, Zap } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -116,7 +117,7 @@ export const LandingPage: React.FC = () => {
                       <span className={`status-badge status-${inc.status.toLowerCase().replace(' ', '-')}`}>{inc.status}</span>
                     </div>
                     <p className="ticker-title">{inc.title}</p>
-                    <span className="ticker-location">📍 {inc.address.split(',')[0]}</span>
+                    <span className="ticker-location"><MapPin size={12} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} />{inc.address.split(',')[0]}</span>
                   </div>
                 ))}
               </div>

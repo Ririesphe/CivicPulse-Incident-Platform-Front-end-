@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { LeafletMap } from '../components/LeafletMap';
-import { MapPin, Image as ImageIcon, Video, User, Phone, AlertCircle } from 'lucide-react';
+import { MapPin, Image as ImageIcon, Video, User, Phone, AlertCircle, Zap, Info, CheckCircle2 } from 'lucide-react';
 
 // Seed locations for Cape Town to make selection easy
 const CAPE_TOWN_NEIGHBORHOODS = [
@@ -140,7 +140,7 @@ export const ReportIncidentPage: React.FC = () => {
           className="btn btn-secondary btn-sm"
           style={{ fontSize: '0.75rem', padding: '6px 12px' }}
         >
-          ⚡ Load Hackathon Demo Scenario
+          <Zap size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px' }} /> Load Hackathon Demo Scenario
         </button>
       </div>
 
@@ -225,7 +225,7 @@ export const ReportIncidentPage: React.FC = () => {
             />
           </div>
           <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)', display: 'block', marginTop: '6px' }}>
-            💡 Tip: Click on the map to fine-tune the exact incident coordinates or drag the black selection pin.
+            <Info size={14} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '4px', color: 'var(--color-text-muted)' }} /> Tip: Click on the map to fine-tune the exact incident coordinates or drag the black selection pin.
           </span>
         </div>
 
@@ -279,7 +279,7 @@ export const ReportIncidentPage: React.FC = () => {
             <div className="mock-upload-area" style={{ border: '2px dashed var(--color-sand)', padding: '16px', borderRadius: '6px', textAlign: 'center', backgroundColor: 'var(--color-white)' }}>
               {videoFile ? (
                 <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', height: '80px', justifyContent: 'center' }}>
-                  <span style={{ fontSize: '0.82rem', color: 'var(--color-green)', fontWeight: 600 }}>✓ Video Attached</span>
+                  <span style={{ fontSize: '0.82rem', color: 'var(--color-green)', fontWeight: 600, display: 'flex', alignItems: 'center', gap: '4px' }}><CheckCircle2 size={14} /> Video Attached</span>
                   <button type="button" className="btn btn-secondary btn-sm" style={{ marginTop: '8px' }} onClick={() => setVideoFile(null)}>Remove Video</button>
                 </div>
               ) : (

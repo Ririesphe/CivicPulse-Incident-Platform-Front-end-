@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { db } from '../db/mockDb';
 import type { Report, Incident } from '../db/schema';
-import { Calendar, MapPin, FileText, ChevronRight } from 'lucide-react';
+import { Calendar, MapPin, FileText, ChevronRight, Mail, Phone, Volume2 } from 'lucide-react';
 
 export const UserDashboardPage: React.FC = () => {
   const { currentUser, navigateTo, refreshTrigger } = useApp();
@@ -49,7 +49,7 @@ export const UserDashboardPage: React.FC = () => {
             <h4 style={{ margin: '2px 0 0', fontSize: '1rem' }}>{currentUser.name}</h4>
           </div>
           <div style={{ fontSize: '0.82rem', color: 'var(--color-text-muted)' }}>
-            📧 {currentUser.email} • 📞 {currentUser.phone}
+            <Mail size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} /> {currentUser.email} • <Phone size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} /> {currentUser.phone}
           </div>
         </div>
       </div>
@@ -133,7 +133,7 @@ export const UserDashboardPage: React.FC = () => {
                 {latestUpdate && (
                   <div style={{ borderTop: '1px solid var(--color-sand-light)', paddingTop: '8px', marginTop: '8px', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <p style={{ margin: 0, fontSize: '0.78rem', color: 'var(--color-charcoal)', lineHeight: 1.4 }}>
-                      🔊 <strong>Latest Update ({latestUpdate.status}):</strong> "{latestUpdate.message.slice(0, 100)}{latestUpdate.message.length > 100 ? '...' : ''}"
+                      <Volume2 size={13} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} /> <strong>Latest Update ({latestUpdate.status}):</strong> "{latestUpdate.message.slice(0, 100)}{latestUpdate.message.length > 100 ? '...' : ''}"
                     </p>
                     <ChevronRight size={16} style={{ color: 'var(--color-sand-dark)', flexShrink: 0, marginLeft: '8px' }} />
                   </div>
