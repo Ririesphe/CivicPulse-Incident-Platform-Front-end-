@@ -15,7 +15,7 @@ const SEED_USERS: User[] = [
   {
     id: 'user-siphelele',
     name: 'Siphelele Malotana',
-    email: 'siphelele@civicpulse.org',
+    email: 'siphelele@civicpulse.org.za',
     phone: '+27 82 123 4567',
     password: 'password123',
     role: 'community',
@@ -395,7 +395,7 @@ export const db = {
     list.push(user);
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(list));
   },
-  
+
   getIncidents: (): Incident[] => JSON.parse(localStorage.getItem(STORAGE_KEYS.INCIDENTS) || '[]'),
   saveIncident: (incident: Incident) => {
     const list = db.getIncidents();
