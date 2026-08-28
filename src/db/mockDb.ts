@@ -353,8 +353,19 @@ const SEED_AI_ANALYSIS: AIAnalysis[] = [
 ];
 
 export const initializeDb = (): void => {
-  if (!localStorage.getItem(STORAGE_KEYS.USERS)) {
+  const existingUsers = localStorage.getItem(STORAGE_KEYS.USERS);
+  if (!existingUsers) {
     localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify(SEED_USERS));
+  } else {
+    // Re-seed if existing users are missing passwords (migration)
+    const parsed = JSON.parse(existingUsers);
+    const needsMigration = parsed.some((u: any) => !u.password);
+    if (needsMigration) {
+      // Merge: update seed users with passwords, keep any user-created accounts
+      const seedIds = SEED_USERS.map(s => s.id);
+      const customUsers = parsed.filter((u: any) => !seedIds.includes(u.id));
+      localStorage.setItem(STORAGE_KEYS.USERS, JSON.stringify([...SEED_USERS, ...customUsers]));
+    }
   }
   if (!localStorage.getItem(STORAGE_KEYS.INCIDENTS)) {
     localStorage.setItem(STORAGE_KEYS.INCIDENTS, JSON.stringify(SEED_INCIDENTS));
