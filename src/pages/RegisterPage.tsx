@@ -1,14 +1,48 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
-import { Shield, Users, CheckCircle, Eye, EyeOff, AlertCircle } from 'lucide-react';
+import { Shield, Users, CheckCircle, Eye, EyeOff, AlertCircle, MapPin } from 'lucide-react';
 import type { User } from '../db/schema';
+
+// Cape Region areas grouped by sub-region
+const CAPE_AREAS = [
+  {
+    group: 'Cape Town Metro',
+    areas: [
+      'Cape Town CBD', 'Woodstock', 'Observatory', 'Salt River', 'Gardens',
+      'Green Point', 'Sea Point', 'Camps Bay', 'Claremont', 'Rondebosch',
+      'Newlands', 'Wynberg', 'Constantia', 'Muizenberg', 'Fish Hoek',
+      "Simon's Town", 'Hout Bay', 'Milnerton', 'Table View', 'Bloubergstrand',
+      'Bellville', 'Parow', 'Goodwood', 'Durbanville',
+    ],
+  },
+  {
+    group: 'Cape Flats',
+    areas: [
+      'Athlone', 'Mitchells Plain', 'Khayelitsha', 'Gugulethu', 'Nyanga',
+      'Langa', 'Philippi', 'Delft', 'Mfuleni', 'Grassy Park', 'Hanover Park',
+    ],
+  },
+  {
+    group: 'Northern Suburbs',
+    areas: ['Brackenfell', 'Kraaifontein', 'Kuils River', 'Eerste River'],
+  },
+  {
+    group: 'Helderberg & Winelands',
+    areas: ['Somerset West', 'Strand', "Gordon's Bay", 'Stellenbosch', 'Paarl', 'Franschhoek'],
+  },
+  {
+    group: 'West Coast',
+    areas: ['Langebaan', 'Saldanha', 'Vredenburg'],
+  },
+];
 
 export const RegisterPage: React.FC = () => {
   const { login, navigateTo } = useApp();
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
+  const [area, setArea] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
@@ -19,7 +53,7 @@ export const RegisterPage: React.FC = () => {
     setLoading(true);
     setError('');
     try {
-      const response = await apiClient.register({ name, email, phone, password });
+      const response = await apiClient.register({ name, email, phone, area, password });
       if (response && response.user) {
         login(response.user);
       } else {
@@ -137,6 +171,31 @@ export const RegisterPage: React.FC = () => {
             </div>
 
             <div className="form-group">
+              <label htmlFor="reg-area">
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: '5px' }}>
+                  <MapPin size={14} style={{ color: 'var(--color-blue)' }} />
+                  Area / Suburb <span className="required">*</span>
+                </span>
+              </label>
+              <select
+                id="reg-area"
+                className="form-control"
+                value={area}
+                onChange={(e) => setArea(e.target.value)}
+                required
+              >
+                <option value="" disabled>Select your area in the Cape Region</option>
+                {CAPE_AREAS.map((group) => (
+                  <optgroup key={group.group} label={group.group}>
+                    {group.areas.map((a) => (
+                      <option key={a} value={a}>{a}</option>
+                    ))}
+                  </optgroup>
+                ))}
+              </select>
+            </div>
+
+            <div className="form-group">
               <label htmlFor="reg-password">Password <span className="required">*</span></label>
               <div style={{ position: 'relative' }}>
                 <input
@@ -183,3 +242,4 @@ export const RegisterPage: React.FC = () => {
 };
 
 export default RegisterPage;
+

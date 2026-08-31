@@ -14,7 +14,6 @@ import IncidentDetailsPage from './pages/IncidentDetailsPage';
 import DashboardPage from './pages/DashboardPage';
 import UserDashboardPage from './pages/UserDashboardPage';
 import { HowItWorks, About } from './pages/StaticPages';
-import Logo from './components/Logo';
 
 const AppContent: React.FC = () => {
   const { currentPage, navigateTo } = useApp();
@@ -68,42 +67,44 @@ const AppContent: React.FC = () => {
 
       {/* Footer (Not displayed on Map to prevent scroll layout conflicts) */}
       {!isFullWidthPage && (
-        <footer style={{ borderTop: '1px solid var(--color-sand)', backgroundColor: 'var(--color-white)', padding: '40px 0', marginTop: 'auto' }}>
+        <footer className="site-footer">
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '30px' }}>
-            <div style={{ maxWidth: '320px' }}>
-              <Logo />
-              <p style={{ margin: '12px 0 0', fontSize: '0.82rem', color: 'var(--color-text-muted)', lineHeight: 1.5 }}>
+            <div className="footer-logo-section">
+              <div className="footer-logo-name">
+                <svg width="24" height="24" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16 3C10.5 3 6 7.5 6 13C6 20.5 16 29 16 29C16 29 26 20.5 26 13C26 7.5 21.5 3 16 3Z" fill="#3B82F6" />
+                  <path d="M10 13H12.5L14.5 10L16.5 16L18.5 13H22" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                Civic<span>Pulse</span>
+              </div>
+              <p>
                 An intelligent community incident reporting platform built for municipal transparency and citizen action.
               </p>
             </div>
 
             <div style={{ display: 'flex', gap: '60px', flexWrap: 'wrap' }}>
               <div>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-charcoal)', marginBottom: '12px', letterSpacing: '0.05em' }}>
-                  Platform Navigation
-                </h4>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.8rem' }}>
-                  <li><button onClick={() => navigateTo('home')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>Home</button></li>
-                  <li><button onClick={() => navigateTo('report')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>Report Incident</button></li>
-                  <li><button onClick={() => navigateTo('map')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>Community Map</button></li>
-                  <li><button onClick={() => navigateTo('incidents')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>Incident Registry</button></li>
+                <h4>Platform Navigation</h4>
+                <ul>
+                  <li><button onClick={() => navigateTo('home')}>Home</button></li>
+                  <li><button onClick={() => navigateTo('report')}>Report Incident</button></li>
+                  <li><button onClick={() => navigateTo('map')}>Community Map</button></li>
+                  <li><button onClick={() => navigateTo('incidents')}>Incident Registry</button></li>
                 </ul>
               </div>
 
               <div>
-                <h4 style={{ fontSize: '0.75rem', fontWeight: 700, textTransform: 'uppercase', color: 'var(--color-charcoal)', marginBottom: '12px', letterSpacing: '0.05em' }}>
-                  Resources & Info
-                </h4>
-                <ul style={{ listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px', fontSize: '0.8rem' }}>
-                  <li><button onClick={() => navigateTo('how-it-works')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>How It Works</button></li>
-                  <li><button onClick={() => navigateTo('about')} style={{ background: 'none', border: 'none', cursor: 'pointer', color: 'var(--color-text-muted)' }}>About Us</button></li>
-                  <li><a href="https://capetown.gov.za" target="_blank" rel="noreferrer" style={{ color: 'var(--color-text-muted)' }}>City of Cape Town Portal</a></li>
+                <h4>Resources & Info</h4>
+                <ul>
+                  <li><button onClick={() => navigateTo('how-it-works')}>How It Works</button></li>
+                  <li><button onClick={() => navigateTo('about')}>About Us</button></li>
+                  <li><a href="https://capetown.gov.za" target="_blank" rel="noreferrer">City of Cape Town Portal</a></li>
                 </ul>
               </div>
             </div>
           </div>
 
-          <div className="container" style={{ borderTop: '1px solid var(--color-sand-light)', marginTop: '30px', paddingTop: '20px', display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: '12px', fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>
+          <div className="container site-footer-bottom">
             <span>© {new Date().getFullYear()} CivicPulse. Turning community voices into action.</span>
             <span>Simulated Hackathon Environment • South African Metros Initiative</span>
           </div>

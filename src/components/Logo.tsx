@@ -20,8 +20,8 @@ export const Logo: React.FC<LogoProps> = ({ className = '', iconOnly = false }) 
         {/* Pin body */}
         <path
           d="M16 3C10.5 3 6 7.5 6 13C6 20.5 16 29 16 29C16 29 26 20.5 26 13C26 7.5 21.5 3 16 3Z"
-          fill="#1A3560"
-          stroke="#1A3560"
+          fill="#0F172A"
+          stroke="#0F172A"
           strokeWidth="1"
           strokeLinejoin="round"
         />
