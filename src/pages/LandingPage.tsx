@@ -54,21 +54,34 @@ export const LandingPage: React.FC = () => {
       <section className="hero-section hero-section--bg">
         <div className="hero-bg-overlay" />
         <div className="hero-center-content">
-          <div className="tagline-badge tagline-badge--light">
-            <BarChart2 size={12} />
+
+          {/* Platform badge */}
+          <div className="tagline-badge tagline-badge--light" style={{ marginBottom: '28px' }}>
+            <BarChart2 size={11} />
             <span>CivicPulse Platform</span>
           </div>
 
+          {/* Main headline */}
           <h1 className="hero-headline hero-headline--light">
-            Report what matters.<br />
+            Report what matters.{' '}
             <span className="text-gradient--light">Track what changes.</span>
           </h1>
 
+          {/* Glowing accent divider */}
+          <div style={{
+            width: '56px', height: '3px', borderRadius: '2px', margin: '20px auto 24px',
+            background: 'linear-gradient(90deg, #60A5FA, #38BDF8)',
+            boxShadow: '0 0 12px rgba(96,165,250,0.7)'
+          }} />
+
+          {/* Supporting copy */}
           <p className="hero-supporting hero-supporting--light">
-            An AI-powered community platform that turns everyday reports into structured incidents, helping communities and response teams identify, prioritise and resolve problems faster.
+            An AI-powered platform connecting Cape Town communities to municipal response teams —
+            report incidents, track progress, and drive real accountability.
           </p>
 
-          <div style={{ display: 'flex', gap: '14px', marginTop: '36px', flexWrap: 'wrap', justifyContent: 'center' }}>
+          {/* CTAs */}
+          <div style={{ display: 'flex', gap: '14px', marginTop: '40px', flexWrap: 'wrap', justifyContent: 'center' }}>
             <button
               className="btn btn-primary btn-lg btn-icon"
               onClick={() => navigateTo(currentUser ? 'report' : 'login')}
@@ -85,15 +98,16 @@ export const LandingPage: React.FC = () => {
             </button>
           </div>
 
+          {/* Sign-up nudge */}
           {!currentUser && (
-            <p style={{ marginTop: '20px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.75)' }}>
+            <p style={{ marginTop: '24px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.65)' }}>
               <button
                 onClick={() => navigateTo('register')}
-                style={{ background: 'none', border: 'none', color: '#93C5FD', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+                style={{ background: 'none', border: 'none', color: '#93C5FD', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 'inherit', textDecoration: 'underline', textUnderlineOffset: '2px' }}
               >
                 Create a free account
               </button>
-              {' '}to track your reports and receive updates.
+              {' '}to track your reports and receive live updates.
             </p>
           )}
         </div>
