@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
-import { Shield, Mail, CheckCircle, ArrowLeft, AlertCircle } from 'lucide-react';
+import { Shield, Mail, CheckCircle, ArrowLeft } from 'lucide-react';
 
 export const ForgotPasswordPage: React.FC = () => {
   const { navigateTo } = useApp();

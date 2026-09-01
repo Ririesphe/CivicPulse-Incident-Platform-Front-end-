@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import type { User, UserRole, Notification } from '../db/schema';
+import type { User, Notification } from '../db/schema';
 import { apiClient } from '../api/apiClient';
 
 export type PageType = 

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
 import { Shield, Users, CheckCircle, Eye, EyeOff, AlertCircle, MapPin } from 'lucide-react';
-import type { User } from '../db/schema';
+
 
 // Cape Region areas grouped by sub-region
 const CAPE_AREAS = [
