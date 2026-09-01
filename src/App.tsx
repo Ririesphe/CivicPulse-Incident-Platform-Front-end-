@@ -65,7 +65,6 @@ const AppContent: React.FC = () => {
       </main>
 
       {/* Footer (Not displayed on Map to prevent scroll layout conflicts) */}
-      {!isFullWidthPage && (
         <footer className="site-footer">
           <div className="container" style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '30px' }}>
             <div className="footer-logo-section">
@@ -87,8 +86,7 @@ const AppContent: React.FC = () => {
                 <ul>
                   <li><button onClick={() => navigateTo('home')}>Home</button></li>
                   <li><button onClick={() => navigateTo('report')}>Report Incident</button></li>
-                  <li><button onClick={() => navigateTo('map')}>Community Map</button></li>
-                  <li><button onClick={() => navigateTo('incidents')}>Incident Registry</button></li>
+                  {/* Map navigation removed for competition version */}
                 </ul>
               </div>
 

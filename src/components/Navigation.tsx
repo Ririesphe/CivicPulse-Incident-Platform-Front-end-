@@ -14,7 +14,7 @@ export const Navigation: React.FC<NavigationProps> = ({ onToggleNotifications })
 
   const navLinks: { label: string; page: PageType }[] = [
     { label: 'Home', page: 'home' },
-    { label: 'Community Map', page: 'map' },
+    // { label: 'Community Map', page: 'map' }, // map removed for competition version
     { label: 'Incidents', page: 'incidents' },
   ];
 
