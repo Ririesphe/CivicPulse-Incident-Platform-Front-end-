@@ -8,7 +8,7 @@ import ForgotPasswordPage from './pages/ForgotPasswordPage';
 import LandingPage from './pages/LandingPage';
 import ReportIncidentPage from './pages/ReportIncidentPage';
 import AIAnalysisPage from './pages/AIAnalysisPage';
-import CommunityMapPage from './pages/CommunityMapPage';
+// import CommunityMapPage removed – map feature deprecated
 import IncidentsPage from './pages/IncidentsPage';
 import IncidentDetailsPage from './pages/IncidentDetailsPage';
 import DashboardPage from './pages/DashboardPage';
@@ -25,8 +25,8 @@ const AppContent: React.FC = () => {
         return <LandingPage />;
       case 'report':
         return <ReportIncidentPage />;
-      case 'map':
-        return <CommunityMapPage />;
+      // case 'map':
+      //   return <CommunityMapPage />; // Map removed for competition version
       case 'incidents':
         return <IncidentsPage />;
       case 'how-it-works':
@@ -52,8 +52,7 @@ const AppContent: React.FC = () => {
     }
   };
 
-  // Maps take full screen, other views require container layout margins
-  const isFullWidthPage = currentPage === 'map';
+
 
   return (
     <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
