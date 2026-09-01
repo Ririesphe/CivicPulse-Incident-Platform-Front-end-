@@ -516,13 +516,15 @@ textarea.form-control { resize: vertical; }
   overflow: hidden;
 }
 
-/* Two-layer overlay: deep navy base + subtle vignette edge */
+/* Multi-layer overlay: solid dark base + centre spotlight so text is always legible */
 .hero-bg-overlay {
   position: absolute;
   inset: 0;
   background:
-    radial-gradient(ellipse at center, transparent 30%, rgba(2, 6, 23, 0.55) 100%),
-    linear-gradient(175deg, rgba(2, 8, 40, 0.78) 0%, rgba(6, 18, 60, 0.62) 55%, rgba(2, 8, 40, 0.85) 100%);
+    /* Darken centre where the paragraph sits */
+    radial-gradient(ellipse 70% 60% at 50% 55%, rgba(2, 8, 40, 0.55) 0%, transparent 100%),
+    /* Deep navy base across entire section */
+    linear-gradient(175deg, rgba(2, 8, 40, 0.82) 0%, rgba(4, 14, 55, 0.75) 50%, rgba(2, 8, 40, 0.88) 100%);
   z-index: 1;
 }
 
@@ -532,7 +534,11 @@ textarea.form-control { resize: vertical; }
   text-align: center;
   width: 100%;
   max-width: 860px;
-  padding: 110px 40px 100px;
+  padding: 110px 48px 100px;
+  /* Subtle frosted-glass backing so text always pops over the photo */
+  background: rgba(2, 8, 40, 0.32);
+  backdrop-filter: blur(2px);
+  border-radius: 0;
 }
 
 /* Frosted-glass pill badge */
@@ -562,15 +568,19 @@ textarea.form-control { resize: vertical; }
   background-clip: text;
 }
 
-/* Supporting paragraph: wider, easier to read in one sweep */
+/* Supporting paragraph: full white, strong shadow, comfortable line length */
 .hero-supporting--light {
-  font-size: 1.125rem;
-  line-height: 1.75;
-  color: rgba(255, 255, 255, 0.78);
-  max-width: 640px;
+  font-size: 1.1rem;
+  font-weight: 400;
+  line-height: 1.80;
+  color: rgba(255, 255, 255, 0.95);
+  max-width: 600px;
   margin-left: auto;
   margin-right: auto;
-  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+  text-shadow:
+    0 1px 4px rgba(0, 0, 0, 0.80),
+    0 2px 16px rgba(0, 0, 0, 0.60);
+  letter-spacing: 0.01em;
 }
 
 /* Ghost button for secondary CTA */
