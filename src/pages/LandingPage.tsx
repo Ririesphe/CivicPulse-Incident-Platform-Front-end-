@@ -3,7 +3,7 @@ import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
 import type { Incident } from '../db/schema';
 // LeafletMap removed – replaced by static background image
-import { MapPin, Activity, Zap, Users, Shield, ArrowRight, ChevronRight, BarChart2 } from 'lucide-react';
+import { MapPin, Zap, Users, Shield, ArrowRight, ChevronRight, BarChart2 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { navigateTo, currentUser } = useApp();
@@ -50,106 +50,52 @@ export const LandingPage: React.FC = () => {
   return (
     <div className="landing-page">
 
-      {/* ── Hero Section ─────────────────────────────────── */}
-      <section className="hero-section">
-        <div className="grid grid-2 hero-grid">
-          {/* Left: text */}
-          <div className="hero-text-content">
-            <div className="tagline-badge">
-              <BarChart2 size={12} />
-              <span>CivicPulse Platform</span>
-            </div>
+      {/* ── Hero Section – full-bleed Cape Town background ── */}
+      <section className="hero-section hero-section--bg">
+        <div className="hero-bg-overlay" />
+        <div className="hero-center-content">
+          <div className="tagline-badge tagline-badge--light">
+            <BarChart2 size={12} />
+            <span>CivicPulse Platform</span>
+          </div>
 
-            <h1 className="hero-headline">
-              Report what matters.<br />
-              <span className="text-gradient">Track what changes.</span>
-            </h1>
+          <h1 className="hero-headline hero-headline--light">
+            Report what matters.<br />
+            <span className="text-gradient--light">Track what changes.</span>
+          </h1>
 
-            <p className="hero-supporting">
-              An AI-powered community platform that turns everyday reports into structured incidents, helping communities and response teams identify, prioritise and resolve problems faster.
+          <p className="hero-supporting hero-supporting--light">
+            An AI-powered community platform that turns everyday reports into structured incidents, helping communities and response teams identify, prioritise and resolve problems faster.
+          </p>
+
+          <div style={{ display: 'flex', gap: '14px', marginTop: '36px', flexWrap: 'wrap', justifyContent: 'center' }}>
+            <button
+              className="btn btn-primary btn-lg btn-icon"
+              onClick={() => navigateTo(currentUser ? 'report' : 'login')}
+            >
+              <MapPin size={17} />
+              Report an Incident
+            </button>
+            <button
+              className="btn btn-lg hero-btn-ghost"
+              onClick={() => navigateTo('map')}
+            >
+              Explore Map
+              <ChevronRight size={16} />
+            </button>
+          </div>
+
+          {!currentUser && (
+            <p style={{ marginTop: '20px', fontSize: '0.875rem', color: 'rgba(255,255,255,0.75)' }}>
+              <button
+                onClick={() => navigateTo('register')}
+                style={{ background: 'none', border: 'none', color: '#93C5FD', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
+              >
+                Create a free account
+              </button>
+              {' '}to track your reports and receive updates.
             </p>
-
-            <div style={{ display: 'flex', gap: '12px', marginTop: '28px', flexWrap: 'wrap' }}>
-              <button
-                className="btn btn-primary btn-lg btn-icon"
-                onClick={() => navigateTo(currentUser ? 'report' : 'login')}
-              >
-                <MapPin size={17} />
-                Report an Incident
-              </button>
-              <button
-                className="btn btn-secondary btn-lg"
-                onClick={() => navigateTo('map')}
-              >
-                Explore Map
-                <ChevronRight size={16} />
-              </button>
-            </div>
-
-            {!currentUser && (
-              <p style={{ marginTop: '20px', fontSize: '0.875rem', color: 'var(--color-text-muted)' }}>
-                <button
-                  onClick={() => navigateTo('register')}
-                  style={{ background: 'none', border: 'none', color: 'var(--color-blue)', fontWeight: 600, cursor: 'pointer', padding: 0, fontSize: 'inherit' }}
-                >
-                  Create a free account
-                </button>
-                {' '}to track your reports and receive updates.
-              </p>
-            )}
-          </div>
-
-          {/* Right: live activity card */}
-          <div className="hero-visual-card">
-            <div className="visual-card-header">
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-                <span className="live-dot" />
-                <span style={{ fontSize: '0.75rem', fontWeight: 700, color: 'var(--color-text-muted)', textTransform: 'uppercase', letterSpacing: '0.06em' }}>
-                  Live Civic Activity
-                </span>
-              </div>
-              <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Cape Town Metro</span>
-            </div>
-
-            <div className="hero-background"></div>
-
-            <div className="hero-ticker-feed">
-              <div className="ticker-header">
-                <Activity size={13} color="var(--color-blue)" />
-                <span>Recent Incident Updates</span>
-              </div>
-              <div className="ticker-items">
-                {loading ? (
-                  <div style={{ padding: '16px', textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.8125rem' }}>
-                    Loading updates...
-                  </div>
-                ) : recentIncidents.length === 0 ? (
-                  <div style={{ padding: '16px', textAlign: 'center', color: 'var(--color-text-muted)', fontSize: '0.8125rem' }}>
-                    No incidents yet. Be the first to report one!
-                  </div>
-                ) : (
-                  recentIncidents.map((inc) => (
-                    <div
-                      key={inc.id}
-                      className="ticker-item"
-                      onClick={() => navigateTo('incident-details', inc.id)}
-                      style={{ cursor: 'pointer' }}
-                    >
-                      <div className="ticker-meta">
-                        <span className="ticker-id">{inc.id}</span>
-                        <span className={`status-badge status-${inc.status.toLowerCase().replace(/ /g, '-')}`}>{inc.status}</span>
-                      </div>
-                      <p className="ticker-title">{inc.title}</p>
-                      <span className="ticker-location">
-                        <MapPin size={11} style={{ display: 'inline', verticalAlign: 'middle', marginRight: '3px' }} />
-                        {inc.address.split(',')[0]}
-                      </span>
-                    </div>
-                  ))
-                )}
-              </div>
-            </div>
-          </div>
+          )}
         </div>
       </section>
 
