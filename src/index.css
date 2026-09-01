@@ -493,24 +493,33 @@ textarea.form-control { resize: vertical; }
 .auth-footer-link button:hover { text-decoration: underline; }
 
 /* ─── Landing Page ─────────────────────────────────────────── */
+/* Default hero (non-bg) */
 .hero-section {
   padding: 72px 20px 60px;
   max-width: 1200px;
   margin: 0 auto;
+}
+/* Full-bleed variant completely resets the base constraints above */
+.hero-section.hero-section--bg {
+  max-width: none;
+  margin: 0;
+  padding: 0;
 }
 .hero-grid { align-items: center; }
 
 /* ── Full-bleed Cape Town hero ───────────────────────────────────────────── */
 .hero-section--bg {
   position: relative;
-  width: 100vw;                   /* full viewport width */
-  max-width: none;                /* override .hero-section max-width: 1200px */
-  margin-left: calc(-50vw + 50%);
-  min-height: 620px;
+  /* Full width of parent – no vw tricks that bleed behind sticky nav */
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  min-height: 600px;
   display: flex;
   align-items: center;
   justify-content: center;
-  /* background-image applied via inline style in JSX (Vite asset URL) */
+  /* background-image set via inline style in JSX for reliable Vite URL */
   background-size: cover;
   background-position: center 40%;
   overflow: hidden;
@@ -535,15 +544,16 @@ textarea.form-control { resize: vertical; }
   z-index: 1;
 }
 
-/* Content sits above overlay, no dark panel */
+/* Content sits above overlay */
 .hero-center-content {
   position: relative;
   z-index: 2;
   text-align: center;
   width: 100%;
   max-width: 820px;
-  padding: 120px 40px 100px;
-  background: transparent;          /* NO dark box */
+  /* Top padding clears the 64px sticky nav + breathing room */
+  padding: 100px 40px 90px;
+  background: transparent;
 }
 
 /* Frosted pill badge */
