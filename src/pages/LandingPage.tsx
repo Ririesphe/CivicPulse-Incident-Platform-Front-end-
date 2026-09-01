@@ -1,29 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
-import type { Incident } from '../db/schema';
-// LeafletMap removed – replaced by static background image
+import capeTownBg from '../assets/cape-town-bg.jpg';
 import { MapPin, Zap, Users, Shield, ArrowRight, ChevronRight, BarChart2 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
   const { navigateTo, currentUser } = useApp();
-  const [recentIncidents, setRecentIncidents] = useState<Incident[]>([]);
   const [stats, setStats] = useState({ total: 0, resolved: 0, open: 0, reports: 0 });
-  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchIncidents = async () => {
-      setLoading(true);
       try {
         const list = await apiClient.getIncidents();
-        setRecentIncidents(list.slice(0, 3));
         const open = list.filter(i => i.status !== 'Resolved' && i.status !== 'Closed').length;
         const resolved = list.filter(i => i.status === 'Resolved' || i.status === 'Closed').length;
         setStats({ total: list.length, resolved, open, reports: list.length * 2 });
       } catch {
         // Backend not yet connected
-      } finally {
-        setLoading(false);
       }
     };
     fetchIncidents();
@@ -47,11 +40,15 @@ export const LandingPage: React.FC = () => {
     }
   ];
 
+  const bgStyle: React.CSSProperties = {
+    backgroundImage: `url(${capeTownBg})`,
+  };
+
   return (
     <div className="landing-page">
 
       {/* ── Hero Section – full-bleed Cape Town background ── */}
-      <section className="hero-section hero-section--bg">
+      <section className="hero-section hero-section--bg" style={bgStyle}>
         <div className="hero-bg-overlay" />
         <div className="hero-center-content">
 

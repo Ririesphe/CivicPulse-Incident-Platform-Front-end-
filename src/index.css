@@ -503,15 +503,16 @@ textarea.form-control { resize: vertical; }
 /* ── Full-bleed Cape Town hero ───────────────────────────────────────────── */
 .hero-section--bg {
   position: relative;
-  width: 100%;
+  width: 100vw;                   /* full viewport width */
+  max-width: none;                /* override .hero-section max-width: 1200px */
+  margin-left: calc(-50vw + 50%);
   min-height: 620px;
   display: flex;
   align-items: center;
   justify-content: center;
-  background-image: url('./assets/cape-town-bg.jpg');
+  /* background-image applied via inline style in JSX (Vite asset URL) */
   background-size: cover;
-  background-position: center 40%;   /* show Table Mountain */
-  background-attachment: fixed;
+  background-position: center 40%;
   overflow: hidden;
 }
 
