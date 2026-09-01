@@ -500,110 +500,116 @@ textarea.form-control { resize: vertical; }
 }
 .hero-grid { align-items: center; }
 
-/* Full-bleed Cape Town background hero */
+/* ── Full-bleed Cape Town hero ───────────────────────────────────────────── */
 .hero-section--bg {
   position: relative;
-  max-width: 100%;
-  min-height: 640px;
-  padding: 0;
+  width: 100%;
+  min-height: 620px;
   display: flex;
   align-items: center;
   justify-content: center;
   background-image: url('./assets/cape-town-bg.jpg');
   background-size: cover;
-  background-position: center 35%;
+  background-position: center 40%;   /* show Table Mountain */
   background-attachment: fixed;
   overflow: hidden;
 }
 
-/* Multi-layer overlay: solid dark base + centre spotlight so text is always legible */
+/*
+  Overlay strategy (competition-grade):
+  – Top half: very light so the skyline + mountain are clearly visible
+  – Bottom half: gradual darkening so buttons/text sit on a readable base
+  – No heavy solid colour – the photo should breathe
+*/
 .hero-bg-overlay {
   position: absolute;
   inset: 0;
-  background:
-    /* Darken centre where the paragraph sits */
-    radial-gradient(ellipse 70% 60% at 50% 55%, rgba(2, 8, 40, 0.55) 0%, transparent 100%),
-    /* Deep navy base across entire section */
-    linear-gradient(175deg, rgba(2, 8, 40, 0.82) 0%, rgba(4, 14, 55, 0.75) 50%, rgba(2, 8, 40, 0.88) 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(5, 12, 40, 0.30) 0%,    /* top – light, photo visible */
+    rgba(5, 12, 40, 0.42) 40%,   /* mid – Table Mountain stays */
+    rgba(5, 12, 40, 0.62) 70%,   /* lower – text area */
+    rgba(5, 12, 40, 0.78) 100%   /* bottom – buttons anchor */
+  );
   z-index: 1;
 }
 
+/* Content sits above overlay, no dark panel */
 .hero-center-content {
   position: relative;
   z-index: 2;
   text-align: center;
   width: 100%;
-  max-width: 860px;
-  padding: 110px 48px 100px;
-  /* Subtle frosted-glass backing so text always pops over the photo */
-  background: rgba(2, 8, 40, 0.32);
-  backdrop-filter: blur(2px);
-  border-radius: 0;
+  max-width: 820px;
+  padding: 120px 40px 100px;
+  background: transparent;          /* NO dark box */
 }
 
-/* Frosted-glass pill badge */
+/* Frosted pill badge */
 .tagline-badge--light {
-  background-color: rgba(255, 255, 255, 0.10);
-  color: rgba(255, 255, 255, 0.90);
-  border-color: rgba(255, 255, 255, 0.22);
-  backdrop-filter: blur(10px);
-  letter-spacing: 0.10em;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.28);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  letter-spacing: 0.12em;
 }
 
-/* Hero headline on dark background */
+/* Headline – crisp white, sharp shadow does the legibility work */
 .hero-headline--light {
-  font-size: 3.5rem !important;
-  line-height: 1.12 !important;
+  font-size: 3.6rem !important;
+  line-height: 1.10 !important;
   letter-spacing: -0.03em !important;
+  font-weight: 800 !important;
   color: #ffffff !important;
-  text-shadow: 0 3px 24px rgba(0, 0, 0, 0.50);
-  margin-bottom: 22px !important;
+  text-shadow:
+    0 2px 6px  rgba(0, 0, 0, 0.70),
+    0 6px 24px rgba(0, 0, 0, 0.45);
+  margin-bottom: 18px !important;
 }
 
-/* Bright sky-blue gradient for the accent line */
+/* Accent gradient on "Track what changes." */
 .text-gradient--light {
-  background: linear-gradient(120deg, #BAE6FD 0%, #60A5FA 45%, #38BDF8 100%);
+  background: linear-gradient(110deg, #93C5FD 10%, #60A5FA 50%, #38BDF8 90%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
 }
 
-/* Supporting paragraph: full white, strong shadow, comfortable line length */
+/* Subheading paragraph – bright, readable, not drowning in shadow */
 .hero-supporting--light {
-  font-size: 1.1rem;
+  font-size: 1.125rem;
   font-weight: 400;
-  line-height: 1.80;
-  color: rgba(255, 255, 255, 0.95);
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  text-shadow:
-    0 1px 4px rgba(0, 0, 0, 0.80),
-    0 2px 16px rgba(0, 0, 0, 0.60);
-  letter-spacing: 0.01em;
+  line-height: 1.75;
+  color: rgba(255, 255, 255, 0.90);
+  max-width: 580px;
+  margin: 0 auto;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.75);
+  letter-spacing: 0.015em;
 }
 
-/* Ghost button for secondary CTA */
+/* Ghost / outline secondary CTA */
 .hero-btn-ghost {
-  background: rgba(255, 255, 255, 0.10);
+  background: rgba(255, 255, 255, 0.12);
   color: #fff;
-  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  border: 1.5px solid rgba(255, 255, 255, 0.40);
   backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   font-weight: 600;
   letter-spacing: 0.01em;
-  transition: background 0.2s ease, border-color 0.2s ease, transform 0.15s ease;
+  transition: background 0.22s ease, border-color 0.22s ease, transform 0.18s ease;
 }
 .hero-btn-ghost:hover {
-  background: rgba(255, 255, 255, 0.20);
-  border-color: rgba(255, 255, 255, 0.60);
-  transform: translateY(-1px);
+  background: rgba(255, 255, 255, 0.22);
+  border-color: rgba(255, 255, 255, 0.65);
+  transform: translateY(-2px);
 }
 
-/* ── Responsive: compact hero on smaller screens ── */
+/* ── Responsive ───────────────────────────────────────────────────────────── */
 @media (max-width: 768px) {
-  .hero-section--bg { min-height: 520px; background-attachment: scroll; }
-  .hero-center-content { padding: 80px 24px 70px; }
-  .hero-headline--light { font-size: 2.25rem !important; }
+  .hero-section--bg      { min-height: 520px; background-attachment: scroll; }
+  .hero-center-content   { padding: 80px 24px 72px; }
+  .hero-headline--light  { font-size: 2.3rem !important; }
   .hero-supporting--light { font-size: 1rem; max-width: 100%; }
 }
 
