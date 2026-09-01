@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useApp } from '../context/AppContext';
 import { apiClient } from '../api/apiClient';
 import type { Incident } from '../db/schema';
-import LeafletMap from '../components/LeafletMap';
+// LeafletMap removed – replaced by static background image
 import { MapPin, Activity, Zap, Users, Shield, ArrowRight, ChevronRight, BarChart2 } from 'lucide-react';
 
 export const LandingPage: React.FC = () => {
@@ -111,14 +111,7 @@ export const LandingPage: React.FC = () => {
               <span style={{ fontSize: '0.75rem', color: 'var(--color-text-muted)' }}>Cape Town Metro</span>
             </div>
 
-            <div className="hero-mini-map">
-              <LeafletMap
-                incidents={recentIncidents}
-                interactive={false}
-                center={[-33.9249, 18.428]}
-                zoom={12}
-              />
-            </div>
+            <div className="hero-background"></div>
 
             <div className="hero-ticker-feed">
               <div className="ticker-header">
