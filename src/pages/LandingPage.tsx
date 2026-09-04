@@ -52,11 +52,7 @@ export const LandingPage: React.FC = () => {
         <div className="hero-bg-overlay" />
         <div className="hero-center-content">
 
-          {/* Platform badge */}
-          <div className="tagline-badge tagline-badge--light" style={{ marginBottom: '28px' }}>
-            <BarChart2 size={11} />
-            <span>CivicPulse Platform</span>
-          </div>
+
 
           {/* Main headline */}
           <h1 className="hero-headline hero-headline--light">
